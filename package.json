@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "node main.tsx",
     "debug": "ts-node-esm src/server.ts",
     "build": "tsc && vite build",
     "preview": "vite preview"
