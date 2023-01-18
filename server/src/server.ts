@@ -1,16 +1,6 @@
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 
-export enum GameStatus {
-  notStarted = "NOT STARTED",
-  playerOneConnected = "PLAYER ONE CONNECTED",
-  playerTwoConnected = "PLAYER TWO CONNECTED",
-}
-
-const gameData = {
-  status: GameStatus.notStarted,
-};
-
 const httpServer = createServer();
 
 const io = new Server(httpServer, {
@@ -45,4 +35,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(5000);
+httpServer.listen(5000, () => {
+  console.log("listening yes");
+});
