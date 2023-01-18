@@ -16,7 +16,7 @@ interface SocketProviderProps {
   children?: React.ReactNode;
 }
 
-const BASE_URL = import.meta.env.VITE_SOME_KEY;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export function SocketProvider({ id, children }: SocketProviderProps) {
   const [socket, setSocket] = useState<any>();
