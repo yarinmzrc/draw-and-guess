@@ -16,11 +16,13 @@ interface SocketProviderProps {
   children?: React.ReactNode;
 }
 
+const BASE_URL = import.meta.env.VITE_SOME_KEY;
+
 export function SocketProvider({ id, children }: SocketProviderProps) {
   const [socket, setSocket] = useState<any>();
 
   const fetchSocket = async () => {
-    const newSocket = await io("http://127.0.0.1:5000", {
+    const newSocket = await io(`${BASE_URL}:5000`, {
       query: { id },
     });
     setSocket(newSocket);

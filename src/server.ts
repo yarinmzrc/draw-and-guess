@@ -15,7 +15,7 @@ const httpServer = createServer();
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://127.0.0.1:5173",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
