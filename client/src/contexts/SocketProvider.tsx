@@ -16,13 +16,11 @@ interface SocketProviderProps {
   children?: React.ReactNode;
 }
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
 export function SocketProvider({ id, children }: SocketProviderProps) {
   const [socket, setSocket] = useState<any>();
 
   const fetchSocket = async () => {
-    const newSocket = await io(`${BASE_URL}:5000`, {
+    const newSocket = await io(`https://guarded-stream-67963.herokuapp.com/`, {
       query: { id },
     });
     setSocket(newSocket);
