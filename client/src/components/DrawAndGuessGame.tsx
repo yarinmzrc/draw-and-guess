@@ -19,7 +19,7 @@ export const DrawAndGuessGame = ({
   const [role, setRole] = useState("");
   const [image, setImage] = useState("");
   const [message, setMessage] = useState("");
-  const [waitingForSecondPlayer, setWaitingForSecondPlayer] = useState(false);
+  const [waitingForSecondPlayer, setWaitingForSecondPlayer] = useState(true);
   const [gameDifficulty, setGameDifficulty] = useState("");
   const [currentWord, setCurrentWord] = useState("");
   const [playerDrawing, setPlayerDrawing] = useState("player1");
@@ -50,9 +50,7 @@ export const DrawAndGuessGame = ({
   };
 
   const assignRole = (roleFromServer: string) => {
-    if (roleFromServer === "player1") {
-      setWaitingForSecondPlayer(true);
-    } else if (roleFromServer === "player2") {
+    if (roleFromServer === "player2") {
       socketContext?.socket.emit("player2available");
     }
     setRole(roleFromServer);
