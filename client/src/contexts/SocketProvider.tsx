@@ -21,7 +21,7 @@ export function SocketProvider({ id, children }: SocketProviderProps) {
 
   const fetchSocket = async () => {
     const newSocket = await io(`https://guarded-stream-67963.herokuapp.com/`, {
-      query: { id },
+      forceNew: true,
     });
     setSocket(newSocket);
     return () => newSocket.close();

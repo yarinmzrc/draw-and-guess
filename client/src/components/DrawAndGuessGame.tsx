@@ -18,6 +18,7 @@ export const DrawAndGuessGame = ({
 }: DrawAndGuessGameProps) => {
   const [role, setRole] = useState("");
   const [image, setImage] = useState("");
+  const [message, setMessage] = useState("");
   const [waitingForSecondPlayer, setWaitingForSecondPlayer] = useState(false);
   const [gameDifficulty, setGameDifficulty] = useState("");
   const [currentWord, setCurrentWord] = useState("");
@@ -96,8 +97,13 @@ export const DrawAndGuessGame = ({
             return;
           });
       });
+      socketContext.socket.on("refresh-page", () => {
+        setMessage("disconnection appeard, please refresh page");
+      });
     }
   }, [socketContext?.socket, image]);
+
+  if (message) return message;
 
   switch (currentView) {
     case "welcome":
