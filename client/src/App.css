@@ -45,3 +45,7 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.welcome-button-disabled {
+  pointer-events: none;
+}

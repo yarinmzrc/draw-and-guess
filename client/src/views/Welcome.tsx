@@ -13,6 +13,7 @@ export const Welcome = ({
     <div>
       <h1>Welcome {role}</h1>
       <button
+        className={`${waitingForSecondPlayer ? "welcome-button-disabled" : ""}`}
         disabled={waitingForSecondPlayer ? true : false}
         onClick={goToWordChoosing}
       >
