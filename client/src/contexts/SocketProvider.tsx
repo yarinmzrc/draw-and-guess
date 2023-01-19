@@ -17,7 +17,7 @@ interface SocketProviderProps {
 }
 
 export function SocketProvider({ id, children }: SocketProviderProps) {
-  const [socket, setSocket] = useState<any>();
+  const [socket, setSocket] = useState<Socket>();
 
   const fetchSocket = async () => {
     const newSocket = await io(`https://guarded-stream-67963.herokuapp.com/`, {

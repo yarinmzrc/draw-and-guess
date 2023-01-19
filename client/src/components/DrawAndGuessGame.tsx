@@ -103,7 +103,7 @@ export const DrawAndGuessGame = ({
     }
   }, [socketContext?.socket, image]);
 
-  if (message) return message;
+  if (message) return <p>{message}</p>;
 
   switch (currentView) {
     case "welcome":
