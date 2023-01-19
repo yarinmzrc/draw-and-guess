@@ -70,6 +70,9 @@ export const DrawAndGuessGame = ({
         socketContext.socket.on("assignedRole", (roleFromServer) => {
           assignRole(roleFromServer);
         });
+        socketContext.socket.on("disconnect", () => {
+          socketContext?.socket.emit("disconnection", role);
+        });
       });
       socketContext.socket.on("can-start-game", () => {
         setWaitingForSecondPlayer((prev) => !prev);

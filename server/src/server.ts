@@ -33,6 +33,13 @@ io.on("connection", (socket) => {
   socket.on("end-game", (points) => {
     socket.broadcast.emit("ended-game", points);
   });
+  socket.on("disconnection", (role) => {
+    if (role === "player1") {
+      playerOne = null;
+    } else if (role === "player2") {
+      playerTwo = null;
+    }
+  });
 });
 
 httpServer.listen(process.env.PORT || 5000, () => {
