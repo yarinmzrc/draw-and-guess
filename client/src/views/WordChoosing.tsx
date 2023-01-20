@@ -1,6 +1,5 @@
-import randomWords from "random-words";
 import { useEffect, useState } from "react";
-import { wordList, wordsArr } from "../words";
+import { wordsArr } from "../words";
 
 interface WordChoosingProps {
   startGame: (difficulty: string) => void;
