@@ -1,19 +1,18 @@
 import { Canvas } from "../components/Canvas";
 import { DrawingProps } from "../interfaces";
 
-export const Drawing = ({
-  setCurrentView,
-  setImage,
-  currentWord,
-  role,
-}: DrawingProps) => {
+export const Drawing = ({ setGameState, gameState, role }: DrawingProps) => {
   const handleSave = () => {
-    setCurrentView("guessing");
+    setGameState((prev) => ({ ...prev, currentView: "guessing" }));
   };
   return (
     <div>
-      <h3>You need to draw: {currentWord}</h3>
-      <Canvas setImage={setImage} handleSave={handleSave} role={role} />
+      <h3>You need to draw: {gameState.currentWord}</h3>
+      <Canvas
+        gameState={gameState}
+        setGameState={setGameState}
+        handleSave={handleSave}
+      />
     </div>
   );
 };

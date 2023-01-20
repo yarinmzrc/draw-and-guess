@@ -5,17 +5,21 @@ export enum GameStatus {
 }
 
 export interface DrawingProps {
-  setCurrentView: React.Dispatch<React.SetStateAction<string>>;
-  setImage: React.Dispatch<React.SetStateAction<string>>;
-  currentWord: string | null;
+  gameState: TGameState;
   role: string;
+  setGameState: React.Dispatch<React.SetStateAction<any>>;
+}
+
+export interface TGameState {
+  image: string;
+  playerDrawing: string;
+  currentWord: string;
+  currentView: string;
+  gameDifficulty: string;
 }
 
 export interface GuessingProps {
-  image: string;
-  currentWord: null | string;
-  gameDifficulty: string;
-  playerDrawing: string;
+  gameState: TGameState;
   points: number[];
   setPoints: React.Dispatch<React.SetStateAction<number[]>>;
   resetGame: () => void;

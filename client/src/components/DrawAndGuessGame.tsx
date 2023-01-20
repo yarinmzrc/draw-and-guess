@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
-import { GameStatus } from "../interfaces";
+import { GameStatus, TGameState } from "../interfaces";
 import { Welcome } from "../views/Welcome";
 import { WordChoosing } from "../views/WordChoosing";
 import { Drawing } from "../views/Drawing";
 import { Guessing } from "../views/Guessing";
 import { Waiting } from "../views/Waiting";
 import { useSocket } from "../contexts/SocketProvider";
+
+const gameStateDefault = {
+  image: "",
+  playerDrawing: "player1",
+  currentWord: "",
+  currentView: "welcome",
+  gameDifficulty: "",
+};
 
 interface DrawAndGuessGameProps {
   points: number[];
@@ -16,37 +24,40 @@ export const DrawAndGuessGame = ({
   setPoints,
   points,
 }: DrawAndGuessGameProps) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [gameState, setGameState] = useState<TGameState>(gameStateDefault);
   const [role, setRole] = useState("");
-  const [image, setImage] = useState("");
   const [message, setMessage] = useState("");
   const [waitingForSecondPlayer, setWaitingForSecondPlayer] = useState(false);
-  const [gameDifficulty, setGameDifficulty] = useState("");
-  const [currentWord, setCurrentWord] = useState("");
-  const [playerDrawing, setPlayerDrawing] = useState("player1");
-  const [currentView, setCurrentView] = useState("welcome");
 
   const socketContext = useSocket();
 
   const resetGame = () => {
-    if (playerDrawing === "player1") {
-      setPlayerDrawing("player2");
+    if (gameState.playerDrawing === "player1") {
+      setGameState((prev) => ({ ...prev, playerDrawing: "player2" }));
     } else {
-      setPlayerDrawing("player1");
+      setGameState((prev) => ({ ...prev, playerDrawing: "player1" }));
     }
-    setCurrentWord("");
-    setImage("");
-    setGameDifficulty("");
-    setCurrentView("word-choosing");
+    setGameState((prev) => ({
+      ...prev,
+      currentWord: "",
+      gameDifficulty: "",
+      currentView: "word-choosing",
+      image: "",
+    }));
   };
 
   const goToWordChoosing = () => {
-    setCurrentView("word-choosing");
+    setGameState((prev) => ({ ...prev, currentView: "word-choosing" }));
   };
 
   const startGame = (word: string) => {
     socketContext?.socket.emit("select-word", word);
-    setCurrentWord(word);
-    setCurrentView("drawing");
+    setGameState((prev) => ({
+      ...prev,
+      currentWord: word,
+      currentView: "drawing",
+    }));
   };
 
   const assignRole = (roleFromServer: string) => {
@@ -59,10 +70,13 @@ export const DrawAndGuessGame = ({
   };
 
   const setGameWordAndDifficulty = (word: string) => {
-    setCurrentWord(word);
     const difficulty =
       word.length >= 6 ? "HARD" : word.length >= 5 ? "MEDIUM" : "EASY";
-    setGameDifficulty(difficulty);
+    setGameState((prev) => ({
+      ...prev,
+      currentWord: word,
+      gameDifficulty: difficulty,
+    }));
   };
 
   useEffect(() => {
@@ -82,8 +96,11 @@ export const DrawAndGuessGame = ({
         setGameWordAndDifficulty(word);
       });
       socketContext.socket.on("image", (data) => {
-        setImage(data);
-        setCurrentView("guessing");
+        setGameState((prev) => ({
+          ...prev,
+          image: data,
+          currentView: "guessing",
+        }));
         return () =>
           socketContext?.socket.removeListener("image", () => {
             return;
@@ -101,11 +118,19 @@ export const DrawAndGuessGame = ({
         setMessage("disconnection appeard, please refresh page");
       });
     }
-  }, [socketContext?.socket, image]);
+  }, [socketContext?.socket, gameState.image]);
+
+  useEffect(() => {
+    if (role) {
+      setIsLoading(false);
+    }
+  }, [role]);
+
+  if (isLoading) return <p>Loading ...</p>;
 
   if (message) return <p>{message}</p>;
 
-  switch (currentView) {
+  switch (gameState.currentView) {
     case "welcome":
       return (
         <Welcome
@@ -115,7 +140,7 @@ export const DrawAndGuessGame = ({
         />
       );
     case "word-choosing":
-      return role === playerDrawing ? (
+      return role === gameState.playerDrawing ? (
         <WordChoosing startGame={startGame} />
       ) : (
         <Waiting />
@@ -123,22 +148,18 @@ export const DrawAndGuessGame = ({
     case "drawing":
       return (
         <Drawing
-          setCurrentView={setCurrentView}
-          setImage={setImage}
+          gameState={gameState}
+          setGameState={setGameState}
           role={role}
-          currentWord={currentWord}
         />
       );
     case "guessing":
-      return role !== playerDrawing ? (
+      return role !== gameState.playerDrawing ? (
         <Guessing
-          playerDrawing={playerDrawing}
+          gameState={gameState}
           points={points}
           setPoints={setPoints}
           resetGame={resetGame}
-          gameDifficulty={gameDifficulty}
-          currentWord={currentWord}
-          image={image}
         />
       ) : (
         <Waiting />

@@ -3,11 +3,8 @@ import { useSocket } from "../contexts/SocketProvider";
 import { GuessingProps } from "../interfaces";
 
 export const Guessing = ({
-  image,
-  currentWord,
-  gameDifficulty,
+  gameState,
   setPoints,
-  playerDrawing,
   points,
   resetGame,
 }: GuessingProps) => {
@@ -18,10 +15,14 @@ export const Guessing = ({
   const addPointsToTheWinner = () => {
     let pointsFromGame = points;
     const difficultyPoints =
-      gameDifficulty === "HARD" ? 5 : gameDifficulty === "MEDIUM" ? 3 : 1;
-    if (playerDrawing === "player1") {
+      gameState.gameDifficulty === "HARD"
+        ? 5
+        : gameState.gameDifficulty === "MEDIUM"
+        ? 3
+        : 1;
+    if (gameState.playerDrawing === "player1") {
       pointsFromGame[1] += difficultyPoints;
-    } else if (playerDrawing === "player2") {
+    } else if (gameState.playerDrawing === "player2") {
       pointsFromGame[0] += difficultyPoints;
     }
     socketContext?.socket.emit("end-game", pointsFromGame);
@@ -36,7 +37,7 @@ export const Guessing = ({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setMessage("");
-    if (guess === currentWord) {
+    if (guess === gameState.currentWord) {
       addPointsToTheWinner();
       setMessage("Yes! You are correct");
       setTimeout(() => {
@@ -50,7 +51,7 @@ export const Guessing = ({
   return (
     <div>
       <div style={{ border: "1px solid white" }} className="image-container">
-        <img src={image} alt="" />
+        <img src={gameState.image} alt="" />
       </div>
       <form onSubmit={handleSubmit}>
         <input onChange={handleTypeAnswer} placeholder="Guess" type="text" />

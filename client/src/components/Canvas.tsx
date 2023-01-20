@@ -7,8 +7,19 @@ import React, {
 } from "react";
 import { useSocket } from "../contexts/SocketProvider";
 import { CanvasProps } from "../interfaces";
+import { TGameState } from "./DrawAndGuessGame";
 
-export const Canvas = ({ setImage, handleSave }: CanvasProps) => {
+interface CanvasPropsNew {
+  setGameState: React.Dispatch<React.SetStateAction<any>>;
+  handleSave: () => void;
+  gameState: TGameState;
+}
+
+export const Canvas = ({
+  setGameState,
+  handleSave,
+  gameState,
+}: CanvasPropsNew) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -66,7 +77,7 @@ export const Canvas = ({ setImage, handleSave }: CanvasProps) => {
     const src = canvasRef.current
       ?.toDataURL("image/png")
       .replace("image/png", "image/octet-stream");
-    setImage(src || "");
+    setGameState((prev) => ({ ...prev, image: src || "" }));
     socketContext?.socket.emit("draw-image", src);
     handleSave?.();
   };
