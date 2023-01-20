@@ -7,19 +7,8 @@ import React, {
 } from "react";
 import { useSocket } from "../contexts/SocketProvider";
 import { CanvasProps } from "../interfaces";
-import { TGameState } from "./DrawAndGuessGame";
 
-interface CanvasPropsNew {
-  setGameState: React.Dispatch<React.SetStateAction<any>>;
-  handleSave: () => void;
-  gameState: TGameState;
-}
-
-export const Canvas = ({
-  setGameState,
-  handleSave,
-  gameState,
-}: CanvasPropsNew) => {
+export const Canvas = ({ setGameState, handleSave }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);

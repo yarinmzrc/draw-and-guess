@@ -7,7 +7,7 @@ export enum GameStatus {
 export interface DrawingProps {
   gameState: TGameState;
   role: string;
-  setGameState: React.Dispatch<React.SetStateAction<any>>;
+  setGameState: React.Dispatch<React.SetStateAction<TGameState>>;
 }
 
 export interface TGameState {
@@ -26,7 +26,6 @@ export interface GuessingProps {
 }
 
 export interface CanvasProps {
-  role: string;
-  setImage: React.Dispatch<React.SetStateAction<string>>;
-  handleSave?: () => void;
+  setGameState: React.Dispatch<React.SetStateAction<TGameState>>;
+  handleSave: () => void;
 }
