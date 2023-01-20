@@ -28,29 +28,37 @@ export const Guessing = ({
     setPoints([...pointsFromGame]);
   };
 
+  const handleTypeAnswer = (e: FormEvent<HTMLInputElement>) => {
+    setGuess((e.target as HTMLInputElement).value);
+    setMessage("");
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setMessage("");
     if (guess === currentWord) {
-      console.log("Yes!");
       addPointsToTheWinner();
-      resetGame();
+      setMessage("Yes! You are correct");
+      setTimeout(() => {
+        resetGame();
+      }, 1000);
     } else {
       setMessage("Wrong Answer, try again");
     }
   };
+
   return (
     <div>
       <div style={{ border: "1px solid white" }} className="image-container">
         <img src={image} alt="" />
       </div>
       <form onSubmit={handleSubmit}>
-        <input
-          onChange={(e) => setGuess(e.target.value)}
-          placeholder="Guess"
-          type="text"
-        />
-        <button style={{ margin: "5px" }} type="submit">
+        <input onChange={handleTypeAnswer} placeholder="Guess" type="text" />
+        <button
+          disabled={message ? true : false}
+          style={{ margin: "5px" }}
+          type="submit"
+        >
           Submit
         </button>
         {message && <p>{message}</p>}

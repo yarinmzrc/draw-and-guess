@@ -14,7 +14,7 @@ export const Welcome = ({
       <h1>Welcome {role}</h1>
       <button
         className={`${waitingForSecondPlayer ? "welcome-button-disabled" : ""}`}
-        disabled={waitingForSecondPlayer ? true : false}
+        disabled={waitingForSecondPlayer}
         onClick={goToWordChoosing}
       >
         Start Game
