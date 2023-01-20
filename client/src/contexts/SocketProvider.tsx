@@ -1,5 +1,13 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
 import { io, Socket } from "socket.io-client";
+import { config } from "../../config";
+
+const environment = process.env.NODE_ENV;
+
+const BASE_URL =
+  environment === "development"
+    ? config.development.url
+    : config.production.url;
 
 export interface SocketContextType {
   socket: Socket;
@@ -20,7 +28,7 @@ export function SocketProvider({ id, children }: SocketProviderProps) {
   const [socket, setSocket] = useState<Socket>();
 
   const fetchSocket = async () => {
-    const newSocket = await io(`https://guarded-stream-67963.herokuapp.com/`, {
+    const newSocket = await io(BASE_URL, {
       forceNew: true,
     });
     setSocket(newSocket);
