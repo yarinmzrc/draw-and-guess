@@ -1953,3 +1953,15 @@ export const wordList = [
   "zoo",
   "zulu",
 ];
+
+const difficulty = [
+  [3, 4],
+  [5, 5],
+  [6, 20],
+];
+
+export const wordsArr = difficulty.map((diff) => {
+  return wordList.filter(
+    (word) => word.length >= diff[0] && word.length <= diff[1]
+  );
+});

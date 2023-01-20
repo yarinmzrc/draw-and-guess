@@ -1,6 +1,6 @@
 import randomWords from "random-words";
 import { useEffect, useState } from "react";
-import { wordList } from "../words";
+import { wordList, wordsArr } from "../words";
 
 interface WordChoosingProps {
   startGame: (difficulty: string) => void;
@@ -9,35 +9,28 @@ interface WordChoosingProps {
 export const WordChoosing = ({ startGame }: WordChoosingProps) => {
   const [words, setWords] = useState<string[]>([]);
   useEffect(() => {
-    const originalArr = wordList;
-    const difficulty = [
-      [3, 4],
-      [5, 5],
-      [6, 20],
-    ];
-    const words = difficulty.map((diff) => {
-      return originalArr.filter(
-        (word) => word.length >= diff[0] && word.length <= diff[1]
-      );
-    });
-
-    const wordsArr = words.map(
+    const wordsToSet = wordsArr.map(
       (arr) => arr[Math.floor(Math.random() * arr.length)]
     );
-
-    setWords(wordsArr);
+    setWords(wordsToSet);
   }, []);
+
+  const pointsToShow = (word) =>
+    word.length >= 6 ? "5 Points" : word.length >= 5 ? "3 Points" : "1 Point";
 
   return (
     <div>
       <h1>WordChoosing</h1>
       <main>
         <h3>Please Choose Difficulty:</h3>
-        {words.map((word) => (
-          <button key={word} onClick={() => startGame(word)}>
-            {word}
-          </button>
-        ))}
+        <div className="word-choosing-container">
+          {words.map((word) => (
+            <div className="word-choosing-button-container" key={word}>
+              <button onClick={() => startGame(word)}>{word}</button>
+              <p>{pointsToShow(word)}</p>
+            </div>
+          ))}
+        </div>
       </main>
     </div>
   );
